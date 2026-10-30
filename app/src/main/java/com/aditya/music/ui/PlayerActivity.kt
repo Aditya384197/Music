@@ -217,10 +217,10 @@ class PlayerActivity : AppCompatActivity() {
         root.addView(extras)
 
         val page = ScrollView(this).apply {
-            fillViewport = true
+            isFillViewport = true
             isVerticalScrollBarEnabled = false
             setBackgroundColor(Color.rgb(16, 17, 22))
-            addView(root, ScrollView.LayoutParams(
+            addView(root, android.widget.FrameLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT
             ))
