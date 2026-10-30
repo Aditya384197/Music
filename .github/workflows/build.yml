@@ -31,14 +31,33 @@ jobs:
       - name: Install Android 16 SDK packages
         shell: bash
         run: |
-          set -eu
+          set -euo pipefail
+
           SDK_ROOT="${ANDROID_SDK_ROOT:-${ANDROID_HOME:-/usr/local/lib/android/sdk}}"
           SDKMANAGER="$(find "$SDK_ROOT/cmdline-tools" -type f -name sdkmanager | sort -V | tail -n 1)"
+
           if [ -z "$SDKMANAGER" ]; then
-            echo "ERROR: Android SDK command-line tools were not found in $SDK_ROOT"
+            echo "::error::Android SDK command-line tools were not found in $SDK_ROOT"
             exit 1
           fi
-          yes | "$SDKMANAGER" --sdk_root="$SDK_ROOT" --licenses
+
+          # sdkmanager closes stdin after accepting all licenses. With pipefail,
+          # the 'yes' process can report SIGPIPE even when sdkmanager succeeded.
+          # Disable pipefail only for this pipeline so sdkmanager's real status
+          # is checked, while the harmless 'yes' SIGPIPE does not fail the job.
+          set +o pipefail
+          if yes 2>/dev/null | "$SDKMANAGER" --sdk_root="$SDK_ROOT" --licenses; then
+            LICENSE_STATUS=0
+          else
+            LICENSE_STATUS=$?
+          fi
+          set -o pipefail
+
+          if [ "$LICENSE_STATUS" -ne 0 ]; then
+            echo "::error::Android SDK license acceptance failed (exit $LICENSE_STATUS)"
+            exit "$LICENSE_STATUS"
+          fi
+
           "$SDKMANAGER" --sdk_root="$SDK_ROOT" \
             "platform-tools" \
             "platforms;android-36" \
