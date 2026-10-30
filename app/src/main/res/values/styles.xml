@@ -1,0 +1,13 @@
+<resources>
+    <style name="Theme.AdityaMusic" parent="Theme.Material3.Dark.NoActionBar">
+        <item name="colorPrimary">#B8C7FF</item>
+        <item name="colorOnPrimary">#17264A</item>
+        <item name="colorSecondary">#C4C6D0</item>
+        <item name="android:statusBarColor">#101116</item>
+        <item name="android:navigationBarColor">#101116</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightNavigationBar">false</item>
+        <item name="android:fontFamily">sans</item>
+        <item name="android:colorAccent">#B8C7FF</item>
+    </style>
+</resources>
