@@ -17,13 +17,13 @@ import androidx.media3.session.MediaSessionService
 import com.aditya.music.data.HistoryStore
 import com.aditya.music.ui.PlayerActivity
 
+@UnstableApi
 class PlaybackService : MediaSessionService() {
     private lateinit var player: ExoPlayer
     private var mediaSession: MediaSession? = null
     private val handler = Handler(Looper.getMainLooper())
     private var sleepRunnable: Runnable? = null
 
-    @OptIn(UnstableApi::class)
     override fun onCreate() {
         super.onCreate()
         val audioAttributes = AudioAttributes.Builder()
